@@ -1,6 +1,9 @@
 .DS_Store
-Rollaball/Library/PackageCache
-Rollaball/Library/PlayerDataCache
-Rollaball/Library/ShaderCache
-Rollaball/Library/SplashScreenCache
-Rollaball/Library/StateCache
+**/Library/PackageCache
+**/Library/PlayerDataCache
+**/Library/ShaderCache
+**/Library/SplashScreenCache
+**/Library/StateCache
+**/Library/BurstCache
+
+**/Library/*Cache
