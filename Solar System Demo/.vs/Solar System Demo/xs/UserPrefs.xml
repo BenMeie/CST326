@@ -1,0 +1,30 @@
+﻿<Properties StartupConfiguration="{6F23A24B-0DBF-548D-D43D-364ECC7A1A93}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Hello.cs">
+    <Files>
+      <File FileName="Assets/Hello.cs" Line="10" Column="35" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="Solar System Demo" expanded="True">
+            <Node name="Assets" expanded="True">
+              <Node name="Hello.cs" selected="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.UnitTesting.TestPad">
+        <State name="__root__">
+          <Node name="Unity" expanded="True" selected="True" />
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="5ddccf1b-723d-42af-912d-c48b0f168701" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
