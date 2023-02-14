@@ -5,6 +5,8 @@ public class PaddleController : MonoBehaviour
     public float unitsPerSecond = 5;
     public int PlayerId;
     public CameraShaker CameraShaker;
+    public GameController gameController;
+    private AudioSource audioSource;
 
     private Rigidbody rb;
 
@@ -14,6 +16,7 @@ public class PaddleController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         boxCollider = GetComponent<BoxCollider>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void FixedUpdate()
@@ -28,19 +31,23 @@ public class PaddleController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.name == "Ball")
-        {
-            BallController ballController = collision.gameObject.GetComponent<BallController>();
-            Bounds bounds = boxCollider.bounds;
-            float colPerc = ((collision.transform.position.x - bounds.min.x)/(bounds.max.x - bounds.min.x)) * 2 - 1;
+        if (collision.gameObject.name != "Ball") return;
+        audioSource.pitch = collision.rigidbody.velocity.y/4;
+        audioSource.Play();
+        BallController ballController = collision.gameObject.GetComponent<BallController>();
+        Bounds bounds = boxCollider.bounds;
+        float colPerc = ((collision.transform.position.x - bounds.min.x)/(bounds.max.x - bounds.min.x)) * 2 - 1;
 
-            float baseRotation = -60 * (-1 * PlayerId);
-            Quaternion rotation = Quaternion.Euler(0f, 0f, baseRotation * colPerc);
-            Vector3 bounceDirection = rotation * (PlayerId == 0 ? Vector3.up : Vector3.down);
-            collision.rigidbody.AddForce(bounceDirection * ballController.speed);
-            ballController.IncreaseBallSpeed();
-            CameraShaker.shakeAmount = 0.1f;
-            CameraShaker.shakeDuration = 0.2f;
-        }
+        float baseRotation = -60 * (-1 * PlayerId);
+        Quaternion rotation = Quaternion.Euler(0f, 0f, baseRotation * colPerc);
+        Vector3 bounceDirection = rotation * (PlayerId == 0 ? Vector3.up : Vector3.down);
+        collision.rigidbody.AddForce(bounceDirection * ballController.speed * 2);
+            
+        ballController.IncreaseBallSpeed();
+            
+        CameraShaker.shakeAmount = 0.1f;
+        CameraShaker.shakeDuration = 0.2f;
+            
+        gameController.UpdateLastHitBy(this);
     }
 }

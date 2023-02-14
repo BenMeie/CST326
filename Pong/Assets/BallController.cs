@@ -7,11 +7,11 @@ public class BallController : MonoBehaviour
 {
     public float speed;
     public float originalSpeed;
+    public GameController gameController;
     private Rigidbody rb;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        rb.AddForce(0, speed, 0);
         originalSpeed = speed;
     }
 
@@ -19,12 +19,12 @@ public class BallController : MonoBehaviour
     private void FixedUpdate()
     {
         Vector3 currentVelocity = rb.velocity;
-        if (currentVelocity.y > speed)
+        if (Math.Abs(currentVelocity.y) < speed && currentVelocity.y > 0 && currentVelocity.y < 2)
         {
-            currentVelocity.y = speed;
-        } else if (currentVelocity.y < -speed)
+            rb.AddForce(0, speed, 0);
+        } else if (Math.Abs(currentVelocity.y) < speed && currentVelocity.y < 0 && currentVelocity.y > 2)
         {
-            currentVelocity.y = -speed;
+            rb.AddForce(0, -speed, 0);
         }
     }
 
@@ -52,4 +52,10 @@ public class BallController : MonoBehaviour
         rb.AddForce(0, speed, 0);
         speed = originalSpeed;
     }
+
+    public void ApplyPowerUp()
+    {
+        gameController.ApplyPowerUp();
+    }
+    
 }

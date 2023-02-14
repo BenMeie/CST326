@@ -1,42 +1,110 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using Button = UnityEngine.UI.Button;
+using Random = UnityEngine.Random;
 
 public class GameController : MonoBehaviour
 {
-    public int Player1Score;
-    public int Player2Score;
-    public int TotalScore;
+    public int player1Score = 0;
+    public int player2Score = 0;
+    public TextMeshPro player1ScoreText;
+    public TextMeshPro player2ScoreText;
+
+    public Button start;
+    public GameObject titleScreen;
+    
     public GameObject ball;
-    private BallController ballController;
+    private BallController _ballController;
+    private PaddleController lastHitBy;
+    public GameObject powerUp;
+    public TextMeshProUGUI powerUpText;
 
     private void Start()
     {
-        ballController = ball.GetComponent<BallController>();
+        _ballController = ball.GetComponent<BallController>();
+        UpdateScoreText(0);
     }
 
-    public int GetPlayer1Score()
+    private void Update()
     {
-        return Player1Score;
+        var ran = Random.value;
+        switch (ran)
+        {
+            case > 0.0f and < 0.00005f:
+                Instantiate(powerUp, new Vector3(Random.Range(-4, 4), Random.Range(-5, 7), 0), Quaternion.identity);
+                break;
+        }
+
+        if (Input.GetButtonDown("Cancel"))
+        {
+            titleScreen.SetActive(true);
+            _ballController.gameObject.SetActive(false);
+        }
     }
 
-    public int GetPlayer2Score()
+    public void UpdateLastHitBy(PaddleController player)
     {
-        return Player2Score;
+        lastHitBy = player;
+    }
+
+    private void UpdateScoreText(int player)
+    {
+        player1ScoreText.text = player1Score.ToString();
+        player2ScoreText.text = player2Score.ToString();
     }
 
     public void IncrementPlayer1Score()
     {
-        Player1Score += 1;
-        Debug.Log("Player 1 scored. Score is now " + Player1Score + " to " + Player2Score);
-        ballController.ResetBall(1);
+        player1Score += 1;
+        _ballController.ResetBall(1);
+        UpdateScoreText(1);
+        player1ScoreText.GetComponent<Animator>().Play("TextPop");
     }
     
     public void IncrementPlayer2Score()
     {
-        Player2Score += 1;
-        Debug.Log("Player 2 scored. Score is now " + Player2Score + " to " + Player1Score);
-        ballController.ResetBall(2);
+        player2Score += 1;
+        _ballController.ResetBall(2);
+        UpdateScoreText(2);
+        player2ScoreText.GetComponent<Animator>().Play("TextPop");
+    }
+
+    public void StartButtonClicked()
+    {
+        start.GetComponent<Animator>().Play("StartClicked");
+        StartCoroutine(WaitToPlay());
+    }
+    
+    private IEnumerator WaitToPlay()
+    {
+        yield return new WaitForSeconds(0.9f);
+        titleScreen.SetActive(false);
+        _ballController.gameObject.SetActive(true);
+        _ballController.ResetBall(2);
+    }
+
+    public void ApplyPowerUp()
+    {
+        if (Random.Range(0, 2) < 1)
+        {
+            ApplyBigPowerUp();
+        }
+        else
+        {
+            ApplySpeedPowerUp();
+        }
+        
+    }
+
+    private void ApplyBigPowerUp()
+    {
+        lastHitBy.transform.localScale = 1.1f * lastHitBy.transform.localScale;
+    }
+
+    private void ApplySpeedPowerUp()
+    {
+        lastHitBy.unitsPerSecond = lastHitBy.unitsPerSecond + 2;
     }
 }
