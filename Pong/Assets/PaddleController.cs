@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PaddleController : MonoBehaviour
@@ -32,7 +33,7 @@ public class PaddleController : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.name != "Ball") return;
-        audioSource.pitch = collision.rigidbody.velocity.y/4;
+        audioSource.pitch = Math.Abs(collision.rigidbody.velocity.y)/20 + 0.7f;
         audioSource.Play();
         BallController ballController = collision.gameObject.GetComponent<BallController>();
         Bounds bounds = boxCollider.bounds;
