@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class Timer : MonoBehaviour
 {
-    public int totalTime = 500;
+    public int totalTime;
     public int timeRemaining;
     public bool active;
 

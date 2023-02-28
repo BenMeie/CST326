@@ -27,6 +27,10 @@ public class UIManager : MonoBehaviour
         timerText.text = $"Time\n {timer.timeRemaining}";
         coinsText.text = $"x{coins}";
         scoreText.text = $"Mario\n {score}";
+        if (!timer.active)
+        {
+            Debug.Log("Out of time!");
+        }
     }
 
     public void IncrementScore()
