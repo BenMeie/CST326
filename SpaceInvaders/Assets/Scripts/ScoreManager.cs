@@ -1,28 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
 {
-    public int score;
-
     public TextMeshProUGUI scoreGui;
-    // Start is called before the first frame update
-    void Start()
+    public TextMeshProUGUI livesGUI;
+    public TextMeshProUGUI highScoreGUI;
+    
+    public void UpdateScore(int score)
     {
-        Enemy.OnEnemyDestroyed += EnemyOnEnemyDestroyed;
-    }
-
-    void EnemyOnEnemyDestroyed(int value)
-    {
-        score += value;
         scoreGui.text = "Score\n" + score.ToString("0000");
     }
 
-    // Update is called once per frame
-    void Update()
+    public void UpdateLives(int lives)
     {
-        
+        livesGUI.text = "Lives\n" + lives.ToString("00");
+    }
+
+    public void UpdateHighScore(int score)
+    {
+        highScoreGUI.text = "High Score\n" + score.ToString("0000");
     }
 }

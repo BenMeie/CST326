@@ -6,11 +6,15 @@ using Vector2 = UnityEngine.Vector2;
 public class Player : MonoBehaviour
 {
   public delegate void PlayerKilled();
-
   public static event PlayerKilled OnPlayerKilled;
   
   public GameObject bullet;
   public float maxSpeed;
+  public GameObject explosionPrefab;
+
+  public AudioSource audioSource;
+  // public ParticleSystem rightSkidParticles;
+  // public ParticleSystem leftSkidParticles;
 
   private Rigidbody2D rb;
 
@@ -19,14 +23,14 @@ public class Player : MonoBehaviour
     rb = GetComponent<Rigidbody2D>();
   }
 
-  public Transform shottingOffset;
+  public Transform shootingOffset;
     // Update is called once per frame
     void Update()
     {
       if (Input.GetKeyDown(KeyCode.Space))
       {
-        GameObject shot = Instantiate(bullet, shottingOffset.position, Quaternion.identity);
-
+        GameObject shot = Instantiate(bullet, shootingOffset.position, Quaternion.identity);
+        audioSource.Play();
         Destroy(shot, 3f);
 
       }
@@ -38,15 +42,33 @@ public class Player : MonoBehaviour
       {
         rb.velocity = new Vector2(rb.velocity.x / 5, rb.velocity.y / 5 );
       }
+
+      // if (Input.GetAxis("Horizontal") > 0 && !rightSkidParticles.isPlaying)
+      // {
+      //   rightSkidParticles.Play();
+      // }
+      // else
+      // {
+      //   rightSkidParticles.Stop();
+      // }
+      //
+      // if (Input.GetAxis("Horizontal") < 0 && !leftSkidParticles.isPlaying)
+      // {
+      //   leftSkidParticles.Play();
+      // }
+      // else
+      // {
+      //   leftSkidParticles.Stop();
+      // }
     }
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-      Debug.Log(col.gameObject + " collided with player");
       if (col.gameObject.CompareTag("EnemyBullet"))
       {
         OnPlayerKilled.Invoke();
-        Destroy(gameObject, 1);
+        Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+        Destroy(gameObject);
       }
     }
 }

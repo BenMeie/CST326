@@ -21,7 +21,9 @@ public class Barricade : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
-        SpriteRenderer.sprite = sprites[damage];
+        else
+        {
+            SpriteRenderer.sprite = sprites[damage];
+        }
     }
 }

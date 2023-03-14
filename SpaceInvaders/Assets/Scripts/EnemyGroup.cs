@@ -9,26 +9,31 @@ public class EnemyGroup : MonoBehaviour
     public GameObject EnemyPrefab;
     public float direction;
     public float speed;
-    public Vector3 initialPosition = new Vector3(-3.5f, 1, 0);
+    public Vector3 initialPosition;
 
-    private bool paused = false;
+    public bool paused = false;
+    private float originalDirection;
+    private float originalSpeed;
     void Start()
     {
         Enemy.OnEnemyDestroyed += IncreaseSpeed;
-        Enemy.OnEnemyHitEnd += OnEnemyHitEnd;
+
+        originalDirection = direction;
+        originalSpeed = speed;
     }
 
-    public void AdvanceRound()
+    public void AdvanceRound(int roundNumber)
     {
-        initialPosition += new Vector3(0, -0.25f, 0);
-        speed -= 0.02f;
+        initialPosition += new Vector3(0, -0.1f, 0);
+        speed = originalSpeed - (roundNumber / 100f);
+        direction = originalDirection;
     }
 
     public void ResetEnemies()
     {
         transform.position = initialPosition;
         InstantiateEnemies(initialPosition);
-        Invoke(nameof(Movement), 1);
+        PauseEnemies(3);
     }
 
     void IncreaseSpeed(int unused)
@@ -37,10 +42,10 @@ public class EnemyGroup : MonoBehaviour
         speed = Math.Clamp(speed, 0, 1);
     }
 
-    public void PauseEnemies()
+    public void PauseEnemies(int seconds)
     {
         paused = true;
-        Invoke(nameof(unPauseEnemies), 3);
+        Invoke(nameof(unPauseEnemies), seconds);
     }
 
     void unPauseEnemies()
@@ -49,10 +54,16 @@ public class EnemyGroup : MonoBehaviour
         Movement();
     }
 
-    void OnEnemyHitEnd()
+    public void OnEnemyHitLeft()
     {
-        direction *= -1;
-        transform.position += new Vector3(0, -0.05f, 0);
+        direction = 0.5f;
+        transform.position += new Vector3(direction, -0.25f, 0);
+    }
+    
+    public void OnEnemyHitRight()
+    {
+        direction = -0.5f;
+        transform.position += new Vector3(direction, -0.25f, 0);
     }
 
     void Movement()
